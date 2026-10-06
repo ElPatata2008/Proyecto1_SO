@@ -5,8 +5,8 @@
 
 class Consumer {
 private:
-    int _gammaTime;
-    int _dispatch;
+    int _gammaTime = 0;
+    int _dispatch = 0;
     SharedBuffer& _buffer;
 
     int amountDispatched = 0;
