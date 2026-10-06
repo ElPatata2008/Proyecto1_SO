@@ -1,4 +1,4 @@
-# Versión 0.0 | Día 4 de Octubre 2026 | Base del programa.
+# Versión 1.0 | Día 4 de Octubre 2026 | Base del programa.
     Se empezó añadiendo la estructura base del programa, es decir los .hpp:
         - Consumer.hpp
         - Producer.hpp
