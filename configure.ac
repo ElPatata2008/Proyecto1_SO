@@ -1,7 +1,6 @@
 AC_PREREQ([1.0])
 AC_INIT([renpipe], [1.0], [pmorales23@alumnos.utalca.cl])
 AM_INIT_AUTOMAKE([-Wall -Werror])
-AC_CONFIG_SRCDIR([src/main.cpp])
 
 AC_PROG_CXX
 AC_CONFIG_FILES([
