@@ -21,8 +21,6 @@ WorkloadResult readWorkload(const std::string& file) {
     
     if (!File.is_open()) {
         std::cout << "\nNo se encontró el Workload.\n";
-        std::cout << "\nSólo hace falta ingresar el nombre del Workload."
-                  << "\nEl programa se encarga de buscarlo y añadir .work .\n";
         return WorkloadResult{0, 0, 0, {}, 0, {}};
     }
 
@@ -54,7 +52,7 @@ int main(int argc, char* argv[]) {
     else if (argc >= 3) { std::cout << "\nDemasiados Workloads ingresados.\n"; return 1; }
 
     std::string file = argv[1];
-    WorkloadResult wlr = readWorkload("test/" + file + ".work");
+    WorkloadResult wlr = readWorkload("test/" + file);
 
     if (wlr.qCap == 0 && wlr.gTime == 0 &&
         wlr.Aamount == 0 && wlr.Atimes.size() == 0 && 
