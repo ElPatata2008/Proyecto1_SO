@@ -21,6 +21,7 @@ WorkloadResult readWorkload(const std::string& file) {
     
     if (!File.is_open()) {
         std::cout << "\nNo se encontró el Workload.\n";
+        std::cout << "\nRevise si el nombre es correcto o si la extensión es '.work'.\n";
         return WorkloadResult{0, 0, 0, {}, 0, {}};
     }
 
@@ -52,22 +53,12 @@ int main(int argc, char* argv[]) {
     else if (argc >= 3) { std::cout << "\nDemasiados Workloads ingresados.\n"; return 1; }
 
     std::string file = argv[1];
-    WorkloadResult wlr = readWorkload("test/" + file);
+    WorkloadResult wlr = readWorkload("test/" + file + ".work");
 
     if (wlr.qCap == 0 && wlr.gTime == 0 &&
         wlr.Aamount == 0 && wlr.Atimes.size() == 0 && 
         wlr.Bamount == 0 && wlr.Btimes.size() == 0
     ) { return 1; }
-
-    // std::cout << "\nQueue Capacity: " << wlr.qCap
-    //           << "\nGamma Time:     " << wlr.gTime
-    //           << "\nAlpha Amount:   " << wlr.Aamount
-    //           << "\nAlpha Times:    ";
-    //           for (int i = 0; i < wlr.Aamount; i++) { std::cout << wlr.Atimes[i] << " "; }
-    // std::cout << "\nBeta Amount:    " << wlr.Bamount
-    //           << "\nBeta Times:     ";
-    //           for (int i = 0; i < wlr.Bamount; i++) { std::cout << wlr.Btimes[i] << " "; }
-    // std::cout << std::endl;
 
     SharedBuffer sb(wlr.qCap);
     Producer A('A', sb, wlr.Atimes);

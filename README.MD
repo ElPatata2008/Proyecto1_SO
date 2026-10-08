@@ -20,7 +20,7 @@ el programa para la ejecución. Para ello se tendrá que usar:
 
 # Ejecución
   Para ejecutar el programa, necesita usar:
-  $./src/pipeline_simulator [ARCHIVO].work
+  $./src/pipeline_simulator [ARCHIVO]
   
   Donde [ARCHIVO] podrá ser cualquiera de los siguientes:
   - 1
@@ -29,8 +29,12 @@ el programa para la ejecución. Para ello se tendrá que usar:
   - test
   - bigshot
 
+  No hace falta ingresisar ".work" al momento de seleccionar el archivo, ya que el programa automáticamente busca e 
+identifica el archivo con su extensión. Si crea un archivo nuevo, especifique su extensión como ".work", ya que el 
+programa no lo reconocerá de otra forma.
+
   Comando de ejemplo de uso:
-  $./src/pipeline_simulator test.work
+  $./src/pipeline_simulator test
 
 # Funcionamiento
   Lo primero que hace el programa será leer el nombre del archivo entregado, el mismo buscará el archivo en la 
