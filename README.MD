@@ -1,22 +1,27 @@
 # Compilación
-  Antes de compilar, se necesita las librerías esenciales de Autotools, para eso necesitará ejecutar el siguiente 
-comando en consola.
-  $ sudo apt-get install build-essential autoconf automake libtool
+  Antes de compilar, es importante verificar que todo está actualizado.
+  $ sudo apt-get update
+  $ sudo apt-get upgrade
+
+  Luego de verificar que todo está bien, también se necesitan los compiladores de C++. Si ya los tiene instalados, se
+puede saltar este paso.
+  $ sudo apt-get install gcc g++
+
+  Ahora que todo está en orden, se necesitan las librerías esenciales de Autotools y Make. Para eso necesitará 
+ejecutar el siguiente comando en consola.
+  $ sudo apt-get install build-essential autoconf automake libtool make
 
   Ya con esto instalado, va a tener que situarse en la carpeta raíz del programa. Cuando lo esté, tendrá que
 ejecutar lo siguiente:
-  $ autoreconf --install
+  $ autoreconf --ivf
 
   Cuando ya todo esté configurado, verá que se crearon varios archivos de configuración, ya con esto tendrá que 
 hacer:
-  $ ./configure CXXFLAGS="-g -fsanitize=thread" LDFLAGS="-fsanitize=thread"
+  $ ./configure 
 
-  Después de ejecutar el comando anterior, se crearan unos archivos Makefile, los cuales serviran para poder compilar 
-el programa para la ejecución. Para ello se tendrá que usar:
+  Después de ejecutar el comando anterior, se crearan unos archivos Makefile, los cuales serviran para poder 
+compilar el programa para la ejecución. Para ello se tendrá que usar:
   $ make
-
-  Si por algún motivo algo no funciona que quiere limpiar la compiliación, tendrá que hacer:
-  $ make clean
 
 # Ejecución
   Para ejecutar el programa, necesita usar:
@@ -29,9 +34,9 @@ el programa para la ejecución. Para ello se tendrá que usar:
   - test
   - bigshot
 
-  No hace falta ingresisar ".work" al momento de seleccionar el archivo, ya que el programa automáticamente busca e 
-identifica el archivo con su extensión. Si crea un archivo nuevo, especifique su extensión como ".work", ya que el 
-programa no lo reconocerá de otra forma.
+  No hace falta ingresar ".work" al momento de seleccionar el archivo, ya que el programa automáticamente busca e 
+identifica el archivo con su extensión en el directorio "test/". Si crea un archivo nuevo, especifique su extensión 
+como ".work", ya que el programa no lo reconocerá de otra forma.
 
   Comando de ejemplo de uso:
   $./src/pipeline_simulator test
