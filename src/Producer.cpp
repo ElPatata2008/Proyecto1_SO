@@ -1,23 +1,24 @@
 #include "../include/Producer.hpp"
 #include "../include/Simulation.hpp"
+#include "../include/alpha_kernels.hpp"
 
-Producer::Producer(char type, SharedBuffer& buffer, const std::vector<int>& times): 
-_type(type), _buffer(buffer), _times(times) {
+Producer::Producer(char type, int id, SharedBuffer& buffer, int amount): 
+_type(type), _id(id), _buffer(buffer), _pkgAmount(amount) {
 
 }
 
 void Producer::run() {
-    for (int i = 0; i < _times.size(); i++) {
-        SimulateWorkload(_times[i]);            // Simula carga de trabajo.
+    for (int i = 0; i < _pkgAmount; i++) {
+        // SimulateWorkload(_times[i]);      
 
-        _buffer.push(Package{_type, i + 1});    // Se empuja a la cola.
+        computeOne();
 
-        if (_times.size() > maxProcess) {       // No va a descansar si la cantidad
-            counter++;                          // paquetes es igual a 5.
-            if (counter == maxProcess) {        // Si ya van 5 procesos,
-                SimulateWorkload(sleepTime);    // Se va a descansar.
-                counter = 0;                    // Reinicio del contador.
-            }
+        _buffer.push(_type); 
+
+        counter++;                          
+        if (counter == maxProcess && _pkgAmount > 0) {        
+            SimulateWorkload(sleepTime);    
+            counter = 0;                    
         }
     }
 }   
@@ -27,3 +28,18 @@ void* Producer::enter(void* arg) {
     self->run();
     return nullptr;
 }
+
+
+Alpha::Alpha(int id, SharedBuffer& buffer, int amount): Producer('A', id, buffer, amount) { }
+
+void Alpha::computeOne() { 
+    data = std::vector<float>(nVertices, 0.0f);
+    transformMesh(data, nVertices); 
+} 
+
+Beta::Beta(int id, SharedBuffer& buffer, int amount): Producer('B', id, buffer, amount) { }
+
+void Beta::computeOne() {
+
+}
+

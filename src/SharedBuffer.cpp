@@ -1,44 +1,56 @@
 #include "../include/SharedBuffer.hpp"
 #include <iostream>
 
-SharedBuffer::SharedBuffer(int cap): _queueCapacity(cap) {
+SharedBuffer::SharedBuffer(size_t cap): _queueCapacity(cap) {
     pthread_mutex_init(&m, nullptr);            // Inicialización de Mutex (Protección).
     pthread_cond_init(&notFull, nullptr);       // Inicialización de condition (Funciona como señal).
     pthread_cond_init(&notEmpty, nullptr);      // Inicialización de condition (Funciona como señal).
 }
 
-void SharedBuffer::push(Package pkg) {
-    pthread_mutex_lock(&m);                     // Lock Activo.
+void SharedBuffer::start(int total) {
+    _totalProyected = total;
+    _pipelineActive = (total > 0);
+}
 
-    while (pkgQueue.size() == _queueCapacity) { // Si la cola está llena,
-        pthread_cond_wait(&notFull, &m);        // Espera señal hasta que
-    }                                           // se haga un espacio.
+void SharedBuffer::push(char type) {
+    pthread_mutex_lock(&m);                     
+
+    while (pkgQueue.size() == _queueCapacity) { 
+        pthread_cond_wait(&notFull, &m);        
+    }                                           
     
-    pkgQueue.push(pkg);                         // Añade el Paquete a la cola.
-    pthread_cond_signal(&notEmpty);             // Envía señal "Cola ya no vacía".
+    Package pkg;
+    if (type == 'A') {
+        pkg.id = _nextIdAlpha++;
+    } else if (type == 'B') {
+        pkg.id = _nextIdBeta++;
+    }
 
-    pthread_mutex_unlock(&m);                   // Desbloquea.
+    pkgQueue.push(pkg);                        
+    pthread_cond_signal(&notEmpty);             
+
+    pthread_mutex_unlock(&m);                   
 }
 
 PopResult SharedBuffer::pop() {
-    pthread_mutex_lock(&m);                     // Lock Activo.
+    pthread_mutex_lock(&m);                     
 
-    bool underflow = pkgQueue.empty();          // Revisa si la cola está vacía.
+    bool underflow = pkgQueue.empty();          
 
-    while (pkgQueue.empty()) {                  // Si la cola está vacía,
-        pthread_cond_wait(&notEmpty, &m);       // Espera señal hasta que
-    }                                           // llegue un paquete.
+    while (pkgQueue.empty()) {                  
+        pthread_cond_wait(&notEmpty, &m);       
+    }                                           
 
-    Package pkg = pkgQueue.front();             // Se guarda el paquete en variable.
-    pkgQueue.pop();                             // Se quita paquete de la cola.
+    Package pkg = pkgQueue.front();             
+    pkgQueue.pop();                             
 
-    int remain = pkgQueue.size();               // Se revisa el número de paquetes restantes.
+    int remain = pkgQueue.size();               
 
-    pthread_cond_signal(&notFull);              // Se manda señal de "Ya no estoy lleno".
+    pthread_cond_signal(&notFull);              
 
-    pthread_mutex_unlock(&m);                   // Desbloquea.
+    pthread_mutex_unlock(&m);                   
 
-    return PopResult{pkg, remain, underflow};   // Se retornan los resultados.
+    return PopResult{pkg, remain, underflow};   
 }
 
 SharedBuffer::~SharedBuffer() {

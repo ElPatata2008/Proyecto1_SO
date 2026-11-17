@@ -80,3 +80,12 @@ queda vacía, haciendo que tarde 40ms extras por estar la cola vacía.
 
   Cuando el flujo haya terminado, se imprimirá en pantalla la cantidad total de paquetes procesados y terminará 
 sin errores
+
+
+La solución es prohibir la copia explícitamente en SharedBuffer:
+
+cpp
+SharedBuffer(const SharedBuffer&) = delete;
+SharedBuffer& operator=(const SharedBuffer&) = delete;
+
+Con eso, cualquiera de los tres casos anteriores pasa a ser un error de compilación, en vez de un bug que descubres en tiempo de ejecución. Es una práctica de las C++ Core Guidelines (la rúbrica las menciona), y puedes citarla en el README.
