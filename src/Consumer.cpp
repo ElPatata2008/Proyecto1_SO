@@ -1,20 +1,27 @@
 #include "../include/Consumer.hpp"
 #include "../include/Simulation.hpp"
 #include <iostream>
+#include <string>
 
 Consumer::Consumer(int id, int time, SharedBuffer& buffer): 
 _id(id), _gammaTime(time), _buffer(buffer) { }
 
 void Consumer::run() {
-    // for (int i = 0; i < _dispatch; i++) {                   // Repite por la cantidad total de paquetes.
-    //     auto r = _buffer.pop();                             // pop() Ya se encarga de esperar.
-    //     if (r.underflow) { SimulateWorkload(timePenalty); } // Si hubo underflow, tiempo de penalzación.
+    while (true) {
+        auto r = _buffer.pop();                             
+        if (r.done) break;                                  
+        if (r.underflow) { SimulateWorkload(timePenalty); } 
 
-    //     std::cout << r.pkg.type << " "                      // Tipo del paquete.
-    //               << r.pkg.id   << " "                      // Id del paquete.
-    //               << r.remain   << "\n";                    // Paquetes restantes.
+        std::string result = "G" + std::to_string(_id) 
+                           + " " + r.pkg.type 
+                           + " " + std::to_string(r.pkg.id) 
+                           + " " + std::to_string(r.remain)
+                           + "\n";
+
+        std::cout << result;                 
                 
-    //     SimulateWorkload(_gammaTime);                       // Tiempo de descanso por paquete.
-    // }
+        SimulateWorkload(_gammaTime);                       
+
+    }
 }
 

@@ -18,8 +18,9 @@ private:
     bool started = false;
 public:
     PipelineEngine(int capacity);
-    void start(int nAlpha, int capAlpha, int nBeta, int capBeta, int nGamma, int timeGamma);
+    int start(int nAlpha, int capAlpha, int nBeta, int capBeta, int nGamma, int timeGamma);
     void waitAndJoin();
+    bool completed() { return buffer.completed(); };
     ~PipelineEngine();
 };
 

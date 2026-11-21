@@ -22,8 +22,8 @@ private:
     int _totalProyected = 0;
     bool _pipelineActive = false;
 
-    int _nextIdAlpha = 0;
-    int _nextIdBeta = 0;
+    int _nextIdAlpha = 1;
+    int _nextIdBeta = 1;
 
     pthread_mutex_t m;
     pthread_cond_t notFull;
@@ -35,9 +35,11 @@ public:
     SharedBuffer(size_t cap);
 
     void start(int total);
+    void shutdown();
 
     void push(char type); 
     PopResult pop();
+    bool completed() { return _consumed == _totalProyected; };
 
     ~SharedBuffer();
 };

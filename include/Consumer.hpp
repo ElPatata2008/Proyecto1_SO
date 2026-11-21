@@ -9,7 +9,6 @@ private:
     int _gammaTime = 0;
     SharedBuffer& _buffer;
 
-    int amountDispatched = 0;
     static constexpr int timePenalty = 4;
 public:
     Consumer(int id, int time, SharedBuffer& buffer);
