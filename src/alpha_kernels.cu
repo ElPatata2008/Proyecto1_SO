@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <cmath>
 
-namespace pipeline {
+namespace {
     struct DeviceBuffer {
         float* ptr = nullptr;
         DeviceBuffer() = default;
@@ -33,14 +33,14 @@ __global__ void rotateYKernel(float* data, int n, float c, float s) {
 bool transformMesh(float* dataCPU, int n, float angle) {
 
     size_t bytes = 3 * n * sizeof(float);
-    pipeline::DeviceBuffer dev;
+    DeviceBuffer dev;
 
     // Reserva Memoría en la GPU
-    if (!pipeline::cudaOk(cudaMalloc(&dev.ptr, bytes), "cudaMalloc")) return false;
+    if (!cudaOk(cudaMalloc(&dev.ptr, bytes), "cudaMalloc")) return false;
     // CUDA_CHECK(cudaMalloc(&dataGPU, bytes));
 
     // Copia de datos de la CPU a la GPU
-    if (!pipeline::cudaOk(cudaMemcpy(dev.ptr, dataCPU, bytes, cudaMemcpyHostToDevice), "cudaMemcpy CPU to GPU")) return false;
+    if (!cudaOk(cudaMemcpy(dev.ptr, dataCPU, bytes, cudaMemcpyHostToDevice), "cudaMemcpy CPU to GPU")) return false;
 
     // Lanzamiento
     int t = 256;
@@ -50,10 +50,10 @@ bool transformMesh(float* dataCPU, int n, float angle) {
     rotateYKernel<<<b, t>>>(dev.ptr, n, c, s); 
 
     // Informa si el lanzamiento falló
-    if (!pipeline::cudaOk(cudaGetLastError(), "cudaGetLastError")) return false;
+    if (!cudaOk(cudaGetLastError(), "cudaGetLastError")) return false;
 
     // Copia de datos de la GPU a la CPU
-    if (!pipeline::cudaOk(cudaMemcpy(dataCPU, dev.ptr, bytes, cudaMemcpyDeviceToHost), "cudaMemcpy GPU to CPU")) return false;
+    if (!cudaOk(cudaMemcpy(dataCPU, dev.ptr, bytes, cudaMemcpyDeviceToHost), "cudaMemcpy GPU to CPU")) return false;
 
     // Libera la reserva de memoria en la GPU
     return true;

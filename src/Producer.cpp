@@ -34,7 +34,7 @@ Producer::~Producer() { }
 
 Alpha::Alpha(int id, SharedBuffer& buffer, int amount): Producer('A', id, buffer, amount) { 
     angle = radiansToDegree(id);
-    data = std::vector<float>(3 * nVertices, 0.0f);
+    data = std::vector<float>(3 * nVertices, 1.0f);
 }
 
 bool Alpha::computeOne() { 

@@ -10,7 +10,7 @@ int PipelineEngine::start(int nAlpha, int capAlpha, int nBeta, int capBeta, int 
     int total = nAlpha * capAlpha + nBeta * capBeta;
     if (started) return 1; 
 
-    bool anyNegatives = nAlpha < 0 || capAlpha < 0 || nBeta < 0 || capBeta < 0 || nGamma < 0 || timeGamma < 0;
+    bool anyNegatives = nAlpha < 0 || capAlpha < 0 || nBeta < 0 || capBeta < 0 || nGamma < 1 || timeGamma < 0;
     bool nAlpha0 = nAlpha > 0 && capAlpha > 0;
     bool nBeta0 = nBeta > 0 && capBeta > 0;
     bool validValues = nAlpha + nBeta > 0 && ((nAlpha0 && !nBeta0) || (!nAlpha0 && nBeta0));

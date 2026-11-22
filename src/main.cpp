@@ -3,6 +3,12 @@
 #include <string>
 #include "../include/pipeline_api.h"
 
+#if defined(__SANITIZE_THREAD__)
+extern "C" const char* __tsan_default_suppressions() {
+    return "race:Beta::computeOne\n";
+}
+#endif
+
 struct WorkloadResult {
     int qCap; 
     int nGamma; int timeGamma;
